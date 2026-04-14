@@ -10,6 +10,7 @@ import {
   RefreshCw,
   FileCode2,
   ChevronRight,
+  Brain,
   ChevronDown,
 } from "lucide-react";
 import { JuicyButton } from "../../shared/ui/JuicyButton";
@@ -73,6 +74,10 @@ export function Sidebar({
 }: SidebarProps) {
   const [fileTree, setFileTree] = useState<FileNode[]>(INITIAL_FILE_TREE);
   const parentRef = useRef<HTMLDivElement>(null);
+
+  const handleWebLLMInstantiate = () => {
+    window.dispatchEvent(new CustomEvent("webllm:instantiate"));
+  };
 
   const handleNewFile = () => {
     alert(
@@ -168,6 +173,13 @@ export function Sidebar({
             className="text-text-muted hover:text-neon-teal transition-colors"
           >
             <FolderPlus size="0.875rem" />
+          </button>
+          <button
+            onClick={handleWebLLMInstantiate}
+            title="Instantiate WebLLM Engine"
+            className="text-text-muted hover:text-neon-teal transition-colors animate-pulse"
+          >
+            <Brain size="0.875rem" />
           </button>
           <button
             onClick={handleRefresh}

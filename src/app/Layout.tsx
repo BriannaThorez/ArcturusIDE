@@ -47,7 +47,7 @@ import {
   Folder,
 } from "lucide-react";
 import { HighlightPromptModal } from "../features/chat/HighlightPromptModal";
-import { webLLM } from "../services/web-llm";
+import { useWebLLMEngine } from "../services/web-llm/manager/useWebLLMEngine";
 import {
   AgenticChat,
   LexicalChatInput,
@@ -233,6 +233,32 @@ export function Layout() {
     ],
   );
 
+  const { loadModel, manager } = useWebLLMEngine();
+
+  useEffect(() => {
+    const handleInstantiate = async () => {
+      if (!isModelReady) {
+        setModelLoadingProgress(`Loading ${selectedModel.name}...`);
+        try {
+          await loadModel(selectedModel.id);
+          setModelLoadingProgress(null);
+          setIsModelReady(true);
+          window.dispatchEvent(
+            new CustomEvent("terminal:write", {
+              detail: `WebLLM worker engine ready for ${selectedModel.name}.`,
+            }),
+          );
+        } catch (error) {
+          setModelLoadingProgress(null);
+          console.error("WebLLM Error:", error);
+        }
+      }
+    };
+    window.addEventListener("webllm:instantiate", handleInstantiate);
+    return () =>
+      window.removeEventListener("webllm:instantiate", handleInstantiate);
+  }, [isModelReady, loadModel, selectedModel]);
+
   const handleSendMessage = async (content: string) => {
     if (!content.trim()) return;
 
@@ -251,44 +277,12 @@ export function Layout() {
 
     if (selectedModel.type === "webgpu") {
       try {
-        setModelLoadingProgress("Initializing WebLLM worker engine...");
-        window.dispatchEvent(
-          new CustomEvent("terminal:write", {
-            detail: `Initializing WebLLM worker engine for ${selectedModel.name}...`,
-          }),
-        );
-
-        window.dispatchEvent(
-          new CustomEvent("terminal:write", {
-            detail: `[WebLLM UI] requested backend=indexeddb, mode=worker, model=${selectedModel.id}`,
-          }),
-        );
-
-        await webLLM.init(
-          (report) => {
-            setModelLoadingProgress(report.text);
-            window.dispatchEvent(
-              new CustomEvent("terminal:write", { detail: report.text }),
-            );
-          },
-          {
-            modelId: selectedModel.id,
-            useWorker: true,
-          },
-        );
-
-        setModelLoadingProgress(null);
-        setIsModelReady(true);
-        window.dispatchEvent(
-          new CustomEvent("terminal:write", {
-            detail: `WebLLM worker engine ready for ${selectedModel.name}.`,
-          }),
-        );
-        window.dispatchEvent(
-          new CustomEvent("terminal:write", {
-            detail: `[WebLLM UI] engine ready, indexedDB backend should now be active if supported by the runtime.`,
-          }),
-        );
+        if (!isModelReady) {
+          setModelLoadingProgress(`Loading ${selectedModel.name}...`);
+          await loadModel(selectedModel.id);
+          setModelLoadingProgress(null);
+          setIsModelReady(true);
+        }
 
         const assistantMsgId = (Date.now() + 1).toString();
         setMessages((prev) => [
@@ -305,7 +299,7 @@ export function Layout() {
           },
         ]);
 
-        await webLLM.generate(content, (text) => {
+        await manager.generate(content, (text) => {
           setMessages((prev) =>
             prev.map((m) =>
               m.id === assistantMsgId ? { ...m, content: text } : m,
@@ -315,16 +309,6 @@ export function Layout() {
       } catch (error) {
         console.error("WebLLM Error:", error);
         setModelLoadingProgress(null);
-        window.dispatchEvent(
-          new CustomEvent("terminal:write", {
-            detail: `WebLLM init/generation failed: ${error instanceof Error ? error.message : String(error)}`,
-          }),
-        );
-        window.dispatchEvent(
-          new CustomEvent("terminal:write", {
-            detail: `[WebLLM UI] diagnostics: model=${selectedModel.id}, backend=indexeddb, mode=worker, indexedDB=${typeof indexedDB !== "undefined" ? "available" : "missing"}`,
-          }),
-        );
         setMessages((prev) => [
           ...prev,
           {
@@ -725,11 +709,13 @@ export function Layout() {
         {/* Header */}
         <header className="header-bar">
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => setIsMainMenuOpen(true)}
+              onMouseLeave={() => setIsMainMenuOpen(false)}
+            >
               <button
                 onClick={() => setIsMainMenuOpen(!isMainMenuOpen)}
-                onMouseEnter={() => setIsMainMenuOpen(true)}
-                onMouseLeave={() => setIsMainMenuOpen(false)}
                 className="circle-btn"
                 title="Main Menu"
                 style={{
@@ -941,27 +927,40 @@ export function Layout() {
 
               {/* Local Model Status Badge */}
               <AnimatePresence>
-                {(modelLoadingProgress || isModelReady) && (
+                {selectedModel.type === "webgpu" && (
                   <motion.div
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0, opacity: 0 }}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 ${
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 cursor-pointer ${
                       modelLoadingProgress
                         ? "bg-[#ff7f7f] shadow-[0_0_15px_#ff7f7f]"
-                        : "bg-[#00f0ff] shadow-[0_0_15px_#00f0ff]"
+                        : isModelReady
+                          ? "bg-[#00f0ff] shadow-[0_0_15px_#00f0ff]"
+                          : "bg-white/10 border border-glass-border hover:border-brand-primary"
                     }`}
+                    onClick={() => {
+                      if (!isModelReady && !modelLoadingProgress) {
+                        window.dispatchEvent(
+                          new CustomEvent("webllm:instantiate"),
+                        );
+                      }
+                    }}
                   >
                     <motion.div
                       animate={
-                        modelLoadingProgress ? { opacity: [0.4, 1, 0.4] } : {}
+                        modelLoadingProgress || !isModelReady
+                          ? { opacity: [0.4, 1, 0.4] }
+                          : {}
                       }
                       transition={{ duration: 1.5, repeat: Infinity }}
                     >
                       <Brain
                         size={18}
                         className={
-                          modelLoadingProgress ? "text-white" : "text-black"
+                          modelLoadingProgress || !isModelReady
+                            ? "text-primary"
+                            : "text-black"
                         }
                       />
                     </motion.div>
@@ -1215,6 +1214,13 @@ export function Layout() {
           </AnimatePresence>
         </div>
       </main>
+
+      {/* Global Status Bar Indicator */}
+      <div className="fixed inset-x-0 bottom-0 h-6 bg-black/80 border-t border-glass-border flex items-center px-4 justify-between z-[100]">
+        <span className="font-mono text-[10px] text-brand-primary/60">
+          WEBLLM ENGINE: {manager.getState().toUpperCase()}
+        </span>
+      </div>
 
       <VectorVisualizerModal
         isOpen={isVisualizerOpen}

@@ -34,10 +34,7 @@ type WebLLMEngineMode = "main-thread" | "worker";
 
 const DEFAULT_MODEL_ID = "Qwen2.5-7B-Instruct-q4f16_1-MLC";
 
-const appConfig = {
-  ...prebuiltAppConfig,
-  cacheBackend: "indexeddb" as const,
-};
+import { getAppConfigForModel } from "./web-llm/registry/modelRegistry";
 
 export class WebLLMService {
   private engine: MLCEngineInterface | null = null;
@@ -84,7 +81,7 @@ export class WebLLMService {
 
   private emitConfigStatus() {
     this.emitDebugStatus(
-      `engineMode=${this.engineMode}, cacheBackend=${appConfig.cacheBackend}, modelId=${this.modelId}`,
+      `engineMode=${this.engineMode}, cacheBackend=indexeddb, modelId=${this.modelId}`,
     );
   }
 
@@ -141,8 +138,10 @@ export class WebLLMService {
     this.engineMode = nextUseWorker ? "worker" : "main-thread";
 
     this.emitConfigStatus();
-    this.emitRuntimeStatus();
+    this.emitConfigStatus();
     this.assertIndexedDBReady();
+
+    const dynamicAppConfig = getAppConfigForModel(this.modelId);
 
     if (this.engineMode === "worker") {
       this.emitDebugStatus("creating worker engine");
@@ -155,7 +154,7 @@ export class WebLLMService {
           );
           onProgress?.(report);
         },
-        appConfig,
+        appConfig: dynamicAppConfig,
       });
       this.emitDebugStatus("worker engine initialized");
       return;
@@ -169,7 +168,7 @@ export class WebLLMService {
         );
         onProgress?.(report);
       },
-      appConfig,
+      appConfig: dynamicAppConfig,
     });
     this.emitDebugStatus("main-thread engine initialized");
   }
