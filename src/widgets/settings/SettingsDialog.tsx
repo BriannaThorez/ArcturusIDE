@@ -169,7 +169,21 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
                           </div>
                         </div>
                         <button
-                          onClick={clearWebLLMCache}
+                          onClick={async () => {
+                            try {
+                              const module = await import("@mlc-ai/web-llm");
+                              if (
+                                typeof module.deleteModelAllInfoInCache ===
+                                "function"
+                              ) {
+                                await module.deleteModelAllInfoInCache();
+                                alert("WebLLM cache cleared successfully.");
+                              }
+                            } catch (e) {
+                              console.error("Failed to clear cache:", e);
+                              alert("Failed to clear cache.");
+                            }
+                          }}
                           className="px-3 py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500/40 text-[11px] font-bold uppercase rounded-lg transition-all"
                         >
                           Clear Cache

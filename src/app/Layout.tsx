@@ -45,9 +45,12 @@ import {
   Brain,
   Book,
   Folder,
+  PcCase,
+  Cloud,
 } from "lucide-react";
 import { HighlightPromptModal } from "../features/chat/HighlightPromptModal";
 import { useWebLLMEngine } from "../services/web-llm/manager/useWebLLMEngine";
+import { MenuDropdown } from "../shared/ui/MenuDropdown";
 import {
   AgenticChat,
   LexicalChatInput,
@@ -89,11 +92,6 @@ export const AVAILABLE_MODELS: Model[] = [
     id: "Qwen2.5-7B-Instruct-q4f16_1-MLC",
     name: "Qwen2.5 7B q4f16_1 (WebGPU)",
     type: "webgpu",
-  },
-  {
-    id: "deepseek-r1-distill-qwen-7b",
-    name: "DeepSeek-R1-Distill-Qwen-7B",
-    type: "local",
   },
 ];
 
@@ -142,6 +140,9 @@ export function Layout() {
 
   const [selectedModel, setSelectedModel] = useState<Model>(
     AVAILABLE_MODELS[0],
+  );
+  const [modelFilter, setModelFilter] = useState<"all" | "local" | "cloud">(
+    "all",
   );
   const [modelMenuOpen, setModelMenuOpen] = useState(false);
 
@@ -777,21 +778,14 @@ export function Layout() {
               </button>
               <AnimatePresence>
                 {centerPanelMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="dropdown-menu-styled"
-                    style={{
-                      left: 0,
-                      top: "100%",
-                      marginTop: "0.5rem",
-                      zIndex: 100,
-                    }}
+                  <MenuDropdown
+                    isOpen={centerPanelMenuOpen}
+                    onClose={() => setCenterPanelMenuOpen(false)}
+                    className="w-48"
                   >
                     <button
                       onClick={() => updatePanel("center", "chat")}
-                      className="dropdown-item"
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:text-brand-primary hover:bg-white/10 rounded-sm text-left"
                     >
                       {settings.panels.center === "chat" && (
                         <Check size={10} className="text-primary" />
@@ -800,14 +794,14 @@ export function Layout() {
                     </button>
                     <button
                       onClick={() => updatePanel("center", "editor")}
-                      className="dropdown-item"
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:text-brand-primary hover:bg-white/10 rounded-sm text-left"
                     >
                       {settings.panels.center === "editor" && (
                         <Check size={10} className="text-primary" />
                       )}{" "}
                       Code Editor
                     </button>
-                  </motion.div>
+                  </MenuDropdown>
                 )}
               </AnimatePresence>
             </div>
@@ -835,21 +829,14 @@ export function Layout() {
               </button>
               <AnimatePresence>
                 {rightPanelMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="dropdown-menu-styled"
-                    style={{
-                      left: 0,
-                      top: "100%",
-                      marginTop: "0.5rem",
-                      zIndex: 100,
-                    }}
+                  <MenuDropdown
+                    isOpen={rightPanelMenuOpen}
+                    onClose={() => setRightPanelMenuOpen(false)}
+                    className="w-48"
                   >
                     <button
                       onClick={() => updatePanel("right", "chat")}
-                      className="dropdown-item"
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:text-brand-primary hover:bg-white/10 rounded-sm text-left"
                     >
                       {settings.panels.right === "chat" && (
                         <Check size={10} className="text-primary" />
@@ -858,14 +845,14 @@ export function Layout() {
                     </button>
                     <button
                       onClick={() => updatePanel("right", "editor")}
-                      className="dropdown-item"
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:text-brand-primary hover:bg-white/10 rounded-sm text-left"
                     >
                       {settings.panels.right === "editor" && (
                         <Check size={10} className="text-primary" />
                       )}{" "}
                       Code Editor
                     </button>
-                  </motion.div>
+                  </MenuDropdown>
                 )}
               </AnimatePresence>
             </div>
@@ -882,30 +869,44 @@ export function Layout() {
               <TerminalIcon size={16} />
             </button>
             <div className="flex items-center gap-2">
-              <div style={{ position: "relative" }}>
+              <div className="relative">
                 <button
                   onClick={() => setModelMenuOpen(!modelMenuOpen)}
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "white",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    cursor: "pointer",
-                  }}
+                  className="flex items-center gap-2 cursor-pointer bg-transparent border-none text-white"
                 >
-                  <span
-                    className="juicy-label text-primary font-black"
-                    style={{ fontSize: "0.8rem", opacity: 1 }}
-                  >
+                  <span className="juicy-label text-primary font-black text-sm">
                     {selectedModel.name}
                   </span>
                   <ChevronDown size={12} className="text-primary" />
                 </button>
-                {modelMenuOpen && (
-                  <div className="dropdown-menu-styled" style={{ left: 0 }}>
-                    {AVAILABLE_MODELS.map((m) => (
+                <MenuDropdown
+                  isOpen={modelMenuOpen}
+                  onClose={() => setModelMenuOpen(false)}
+                >
+                  <div className="px-3 py-2 border-b border-glass-border/30 flex items-center gap-2">
+                    <button
+                      onClick={() => setModelFilter("all")}
+                      className={`p-1 ${modelFilter === "all" ? "text-primary" : "opacity-50"}`}
+                    >
+                      All
+                    </button>
+                    <button
+                      onClick={() => setModelFilter("local")}
+                      className={`p-1 ${modelFilter === "local" ? "text-primary" : "opacity-50"}`}
+                    >
+                      <PcCase size={14} />
+                    </button>
+                    <button
+                      onClick={() => setModelFilter("cloud")}
+                      className={`p-1 ${modelFilter === "cloud" ? "text-primary" : "opacity-50"}`}
+                    >
+                      <Cloud size={14} />
+                    </button>
+                  </div>
+                  <div className="max-h-64 overflow-y-auto">
+                    {AVAILABLE_MODELS.filter(
+                      (m) => modelFilter === "all" || m.type === modelFilter,
+                    ).map((m) => (
                       <button
                         key={m.id}
                         onClick={() => {
@@ -913,72 +914,71 @@ export function Layout() {
                           setModelMenuOpen(false);
                           if (m.type !== "webgpu") setIsModelReady(false);
                         }}
-                        className="dropdown-item"
+                        className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:text-brand-primary hover:bg-white/10 rounded-sm text-left"
                       >
-                        {selectedModel.id === m.id && (
-                          <Check size={10} className="text-primary" />
-                        )}
+                        {selectedModel.id === m.id && <Check size={12} />}
                         {m.name}
                       </button>
                     ))}
                   </div>
-                )}
+                </MenuDropdown>
               </div>
 
               {/* Local Model Status Badge */}
-              <AnimatePresence>
-                {selectedModel.type === "webgpu" && (
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 cursor-pointer ${
-                      modelLoadingProgress
-                        ? "bg-[#ff7f7f] shadow-[0_0_15px_#ff7f7f]"
-                        : isModelReady
-                          ? "bg-[#00f0ff] shadow-[0_0_15px_#00f0ff]"
-                          : "bg-white/10 border border-glass-border hover:border-brand-primary"
-                    }`}
-                    onClick={() => {
-                      if (!isModelReady && !modelLoadingProgress) {
-                        window.dispatchEvent(
-                          new CustomEvent("webllm:instantiate"),
-                        );
-                      }
-                    }}
-                  >
+              <div className="flex items-center gap-2">
+                <AnimatePresence>
+                  {selectedModel.type === "webgpu" && (
                     <motion.div
-                      animate={
-                        modelLoadingProgress || !isModelReady
-                          ? { opacity: [0.4, 1, 0.4] }
-                          : {}
-                      }
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      <Brain
-                        size={18}
-                        className={
-                          modelLoadingProgress || !isModelReady
-                            ? "text-primary"
-                            : "text-black"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 cursor-pointer ${
+                        modelLoadingProgress
+                          ? "bg-amber-500/20 border border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+                          : isModelReady
+                            ? "bg-[#00f0ff]/20 border border-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.5)]"
+                            : "bg-white/10 border border-glass-border hover:border-brand-primary"
+                      }`}
+                      onClick={() => {
+                        if (!isModelReady && !modelLoadingProgress) {
+                          window.dispatchEvent(
+                            new CustomEvent("webllm:instantiate"),
+                          );
                         }
-                      />
+                      }}
+                    >
+                      <motion.div
+                        animate={
+                          modelLoadingProgress || !isModelReady
+                            ? { opacity: [0.4, 1, 0.4], scale: [1, 1.1, 1] }
+                            : {}
+                        }
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        <Brain
+                          size={18}
+                          className={
+                            modelLoadingProgress
+                              ? "text-amber-500"
+                              : isModelReady
+                                ? "text-[#00f0ff]"
+                                : "text-brand-primary"
+                          }
+                        />
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
+                  )}
+                </AnimatePresence>
+                {modelLoadingProgress && (
+                  <span className="font-mono text-primary animate-pulse text-[0.6rem] tracking-widest">
+                    {modelLoadingProgress}
+                  </span>
                 )}
-              </AnimatePresence>
+              </div>
             </div>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            {modelLoadingProgress && (
-              <span
-                className="font-mono text-primary animate-pulse"
-                style={{ fontSize: "0.6rem", letterSpacing: "0.1em" }}
-              >
-                {modelLoadingProgress}
-              </span>
-            )}
             <button
               onClick={() => setIsDocViewerOpen(!isDocViewerOpen)}
               className="circle-btn"
@@ -1013,7 +1013,9 @@ export function Layout() {
                 className="font-mono text-primary"
                 style={{ fontSize: "0.6rem", letterSpacing: "0.1em" }}
               >
-                UPLINK_STABLE
+                {modelLoadingProgress
+                  ? "LOADING..."
+                  : selectedModel.name.toUpperCase()}
               </span>
             </div>
           </div>
@@ -1217,9 +1219,26 @@ export function Layout() {
 
       {/* Global Status Bar Indicator */}
       <div className="fixed inset-x-0 bottom-0 h-6 bg-black/80 border-t border-glass-border flex items-center px-4 justify-between z-[100]">
-        <span className="font-mono text-[10px] text-brand-primary/60">
-          WEBLLM ENGINE: {manager.getState().toUpperCase()}
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className={`font-mono text-[10px] ${manager.getState() === "error" ? "text-red-500" : "text-brand-primary/60"}`}
+          >
+            WebGPU Engine:{" "}
+            {manager.getState() === "ready"
+              ? "READY"
+              : manager.getState() === "loading"
+                ? "DOWNLOADING_MODEL"
+                : manager.getState().toUpperCase()}
+          </span>
+          <a
+            href="https://webgpureport.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`ml-2 flex items-center justify-center w-4 h-4 rounded-full border border-glass-border font-mono text-[9px] hover:scale-110 transition-transform ${manager.getState() === "error" ? "text-red-500 border-red-500" : "text-brand-primary border-brand-primary"}`}
+          >
+            i
+          </a>
+        </div>
       </div>
 
       <VectorVisualizerModal
