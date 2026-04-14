@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "title": "Procedural Smart-Documentation System: Implementation Roadmap",
+    "version": "1.0.0",
+    "architecture": "Feature-Sliced Design (FSD)",
+    "intents": {
+      "axiomatic": "Documentation is a dynamic knowledge graph where identity is decoupled from physical location.",
+      "axiological": "Frictionless discovery and zero-maintenance resilience are the primary metrics of system value.",
+      "teleological": "To establish a self-organizing educational ecosystem that scales automatically with content growth."
+    }
+  },
+  "phases": [
+    {
+      "id": "PHASE_0",
+      "title": "Infrastructure & FSD Scaffolding",
+      "description": "Establish the modular directory structure within the documentation feature slice.",
+      "steps": [
+        {
+          "task": "Create FSD directory structure at `src/features/smart-docs/`",
+          "subtasks": ["model/", "ui/", "lib/", "api/"],
+          "check": "Verify directory existence and empty index exports."
+        },
+        {
+          "task": "Install required dependencies",
+          "subtasks": ["gray-matter (for frontmatter)", "lucide-react (icons)", "motion/react (animations)"],
+          "check": "Check package.json for successful installation."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_1",
+      "title": "The Axiological Registry (Data Layer)",
+      "description": "Implement the path-independent concept registry using Vite's dynamic discovery.",
+      "steps": [
+        {
+          "task": "Implement `ViteScanner` in `lib/`",
+          "subtasks": ["Use `import.meta.glob` to scan `.md` files", "Extract frontmatter IDs and titles"],
+          "check": "Console log the generated Knowledge Map to verify all .md files are detected."
+        },
+        {
+          "task": "Define `RegistryStore` in `model/`",
+          "subtasks": ["Create a Map of Slug -> Metadata", "Implement path-independent lookup logic"],
+          "check": "Unit test: Move a file and verify the Registry updates the path correctly on reload."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_2",
+      "title": "The Semantic Parser (Logic Layer)",
+      "description": "Create the procedural linker that identifies terms and injects smart components.",
+      "steps": [
+        {
+          "task": "Develop `ProceduralLinker` service",
+          "subtasks": ["Regex-based term identification", "Alias matching logic", "Prevention of self-linking (recursion guard)"],
+          "check": "Verify that 'Cthic Field' in a document is successfully identified and flagged for component injection."
+        },
+        {
+          "task": "Implement `SnippetExtractor`",
+          "subtasks": ["Extract first 150 chars of target docs for tooltips", "Strip markdown syntax for clean previews"],
+          "check": "Verify tooltip content is concise and readable."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_3",
+      "title": "The Manifold Tooltip (UI Layer)",
+      "description": "Build the high-fidelity, interactive tooltip components.",
+      "steps": [
+        {
+          "task": "Create `SmartTerm` component in `ui/`",
+          "subtasks": ["Hover state management", "Neon-glow styling", "Integration with Tooltip primitive"],
+          "check": "Visual check: Ensure the cyan border and aura pulse match the simulation's aesthetic."
+        },
+        {
+          "task": "Implement `ManifoldTooltip` with clickable links",
+          "subtasks": ["Render preview snippet", "Add 'Read More' button", "Handle click events"],
+          "check": "Verify that clicking 'Read More' triggers a navigation intent."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_4",
+      "title": "Decoupled Navigation & Event Bus",
+      "description": "Establish the event-driven routing system for path-independent traversal.",
+      "steps": [
+        {
+          "task": "Implement `DocEventBus` in `lib/`",
+          "subtasks": ["Define `DOC_NAVIGATE` custom event", "Implement event dispatcher and listener"],
+          "check": "Verify that a tooltip click updates the top-level DocumentationViewer state without direct props."
+        },
+        {
+          "task": "Implement `AxiologicalBreadcrumbs`",
+          "subtasks": ["Track navigation history", "Implement 'Back' functionality"],
+          "check": "Verify the user can successfully traverse back through their discovery path."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_5",
+      "title": "Heuristics & Self-Healing",
+      "description": "Automate alias generation and implement error resilience.",
+      "steps": [
+        {
+          "task": "Implement `HeuristicAliasGenerator`",
+          "subtasks": ["Auto-alias from Filename", "Auto-alias from H1/H2 headers", "Fuzzy matching for plurals/possessives"],
+          "check": "Verify that 'Cthic Fields' (plural) correctly links to the 'Cthic Field' document."
+        },
+        {
+          "task": "Implement `ValidationGate`",
+          "subtasks": ["Detect unresolved terms", "Log diagnostic warnings", "Graceful fallback to plain text"],
+          "check": "Delete a file and verify that links to it revert to plain text without crashing."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_6",
+      "title": "Integration & Final Validation",
+      "description": "Apply the system to the existing documentation and verify the full discovery loop.",
+      "steps": [
+        {
+          "task": "Refactor `DocumentationViewer` to use SmartDocs feature",
+          "subtasks": ["Replace static rendering with `ProceduralLinker` output"],
+          "check": "Full loop check: Hover -> Tooltip -> Click -> Navigate."
+        },
+        {
+          "task": "Final Performance Audit",
+          "subtasks": ["Check scan times for large doc sets", "Verify O(1) term resolution efficiency"],
+          "check": "Ensure UI remains responsive during Knowledge Map generation."
+        }
+      ]
+    }
+  ],
+  "periodic_checks": [
+    "Check 1: Registry Integrity - Run after any file move/rename.",
+    "Check 2: Semantic Accuracy - Verify aliases match intended concepts.",
+    "Check 3: Event Stability - Ensure navigation events don't leak or double-trigger.",
+    "Check 4: Visual Consistency - Ensure tooltips maintain the 'Cthic' aesthetic across all documents."
+  ]
+}

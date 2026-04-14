@@ -1,0 +1,45 @@
+{
+  "fonts": {
+    "global_px": 14,
+    "panel_relative_pct": {
+      "terminal": 90,
+      "agent_panel": 100,
+      "code_editor": 100
+    },
+    "font_family": {
+      "global": "Lexend Deca, sans-serif",
+      "terminal": "Atkinson Hyperlegible Monospace, monospace",
+      "agent_panel": "Lexend Deca, sans-serif",
+      "code_editor": "Atkinson Hyperlegible Monospace, monospace",
+      "options": [
+        "Lexend",
+        "Lexend Deca",
+        "Atkinson Hyperlegible Monospace",
+        "JetBrains Mono",
+        "Inter, sans-serif"
+      ]
+    }
+  },
+  "//placeholder_theme_palette": {
+    "color1": "rgba(0, 0, 0, 0.8)",
+    "color2": "rgba(255, 255, 255, 0.1)",
+    "color3": "rgba(74, 222, 128, 1)",
+    "color4": "rgba(56, 189, 248, 1)",
+    "color5": "rgba(20, 20, 20, 0.9)"
+  },
+  "layout": {
+    "fileTreeWidth": 280,
+    "fileTreeMin": 200,
+    "fileTreeMax": 600,
+    "convManagerWidth": 280,
+    "convManagerMin": 200,
+    "convManagerMax": 600,
+    "terminalHeight": 300,
+    "terminalMin": 100,
+    "terminalMax": 800
+  },
+  "panels": {
+    "center": "chat",
+    "right": "editor"
+  }
+}

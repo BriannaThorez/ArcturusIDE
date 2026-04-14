@@ -1,0 +1,157 @@
+{
+  "_standards_instructions": {
+    "purpose": "This document is the Source of Truth (SOT) for the application's architecture. It must be detailed enough to allow an engineer or agentic IDE to perform a 'blind-rebuild' of the program almost visually identically.",
+    "update_protocol": "Whenever a new package, component, or architectural pattern is added, it MUST be documented here. Each entry MUST include: 'where' (location in codebase), 'why' (purpose), 'how' (implementation details), and 'rationale' (justification for the choice)."
+  },
+  "core_infrastructure": {
+    "platform": "Web",
+    "framework": "React (Vite)",
+    "styling": "Tailwind CSS with custom CSS variables for theming",
+    "icons": {
+      "package": "lucide-react",
+      "where": "Used globally across all UI components (e.g., Layout.tsx, Sidebar.tsx)",
+      "why": "Provides a consistent, clean, and customizable icon set.",
+      "how": "Imported as individual React components.",
+      "rationale": "Industry standard for modern React applications, offering a wide variety of icons with minimal bundle size impact.",
+      "intricacies": "Icons are tree-shaken by Lucide's build process, ensuring minimal bundle size.",
+      "use_cases_current": "UI navigation, status indicators, and action buttons.",
+      "use_cases_potential": "Dynamic icon generation based on file types or system status."
+    },
+    "animations": {
+      "package": "motion/react (Framer Motion)",
+      "where": "Layout.tsx, Sidebar.tsx, modals",
+      "why": "To provide smooth, physics-based animations for panel toggling, resizing, and component mounting/unmounting.",
+      "how": "Using <motion.div> and <AnimatePresence> wrappers.",
+      "rationale": "Offers declarative and highly performant animations that enhance the 'Sovereign IDE' aesthetic without complex CSS transitions.",
+      "intricacies": "Uses Framer Motion's AnimatePresence for component mounting/unmounting animations, which can be resource-intensive if overused.",
+      "use_cases_current": "Panel toggling, dropdown menus, and modal transitions.",
+      "use_cases_potential": "Complex, physics-based UI interactions and drag-and-drop animations."
+    }
+  },
+  "state_and_persistence": {
+    "user_settings": {
+      "file": "src/usersettings.json",
+      "hook": "src/hooks/useUserSettings.ts",
+      "where": "Global state accessed via the useUserSettings hook.",
+      "why": "To store persistent data for the user, such as layout dimensions, font preferences, theme choices, and panel configurations.",
+      "how": "The JSON file acts as the default schema. The hook reads from this schema, merges it with any saved state in localStorage, and provides an update function that syncs back to localStorage.",
+      "rationale": "Ensures that user customizations (like panel sizes and active tools) survive browser reloads, providing a persistent IDE experience.",
+      "intricacies": "Uses localStorage as the persistence layer; sensitive data should not be stored here.",
+      "use_cases_current": "Storing panel layout, theme selection, and font preferences.",
+      "use_cases_potential": "Cloud-based synchronization of user settings across multiple IDE instances."
+    }
+  },
+  "rendering_technologies": {
+    "primary": "WebGL2",
+    "packages": ["react-three-fiber", "three"],
+    "where": "src/shared/ui/ArcturusTheme.tsx (ThreeWebGPUField)",
+    "why": "To render the dynamic, bioluminescent background effects.",
+    "how": "Utilizes Three.js for scene management and WebGL2 for efficient 3D graphics rendering.",
+    "rationale": "Provides a performant foundation for the unique visual identity of the IDE without blocking the main UI thread.",
+    "intricacies": "Requires WebGPU support; falls back to WebGL if unavailable, which may impact performance.",
+    "use_cases_current": "Dynamic bioluminescent background effects.",
+    "use_cases_potential": "Interactive 3D workspace elements and data visualization overlays."
+  },
+  "code_editor": {
+    "package": "@uiw/react-codemirror",
+    "architecture": "CodeMirror 6",
+    "where": "src/features/codemirror6/CodeMirrorEditor.tsx",
+    "why": "To provide a robust, extensible code editing experience.",
+    "how": "Integrates CodeMirror 6 via the @uiw wrapper. Uses extensions for syntax highlighting (@codemirror/lang-javascript), theming, and custom keymaps.",
+    "rationale": "CodeMirror 6 offers a highly modular architecture, enabling fine-grained control over editor features and seamless React integration.",
+    "intricacies": "Requires careful management of CodeMirror extensions to prevent performance degradation in large files.",
+    "use_cases_current": "Main code editing workspace, inline code rendering in chat.",
+    "use_cases_potential": "Integrated language server protocol (LSP) support for advanced code intelligence."
+  },
+  "ai_integration": {
+    "cloud_provider": {
+      "package": "@google/genai",
+      "where": "server-side AI gateway or protected backend endpoint",
+      "why": "To access powerful cloud-based LLMs (Gemini Pro/Flash) without exposing credentials in client code.",
+      "how": "Keep API keys server-side and proxy requests from the UI through a secure service boundary.",
+      "rationale": "Provides state-of-the-art reasoning and code generation capabilities while protecting secrets.",
+      "intricacies": "Requires secure secret storage, request validation, and network timeout handling on the server.",
+      "use_cases_current": "Primary AI assistant for code generation and reasoning via a safe backend integration.",
+      "use_cases_potential": "Advanced context-aware code refactoring and multi-modal analysis."
+    },
+    "local_provider": {
+      "package": "@mlc-ai/web-llm",
+      "where": "src/services/webLLMService.ts",
+      "why": "To offer privacy-focused, offline-capable AI assistance.",
+      "how": "Loads models via WebGPU directly in the browser.",
+      "rationale": "Reduces reliance on cloud APIs and provides a fallback/alternative for sensitive codebases.",
+      "intricacies": "Requires WebGPU; model weights are large and require significant initial download time.",
+      "use_cases_current": "Privacy-focused, offline-capable AI assistance.",
+      "use_cases_potential": "Completely local, air-gapped AI development environments."
+    }
+  },
+  "agentic_chat_gui": {
+    "where": "src/features/agentic-chat/",
+    "why": "To provide a rich, interactive conversation interface with the AI.",
+    "how": "A hybrid approach combining TanStack Virtual for list management and Lexical for rich text rendering.",
+    "rationale": "Separating list virtualization from content rendering is critical for performance. Forcing a rich text editor to manage a massive list of nodes leads to severe degradation.",
+    "components": {
+      "list_virtualization": {
+        "package": "@tanstack/react-virtual",
+        "where": "AgenticChat.tsx",
+        "why": "To manage 500+ chat bubbles efficiently.",
+        "how": "Handles scrolling, dynamic heights, and memory management by only rendering visible items.",
+        "rationale": "Prevents DOM bloat in extensive chat histories.",
+        "intricacies": "Requires careful management of dynamic item heights to prevent scrolling issues.",
+        "use_cases_current": "Managing 500+ chat bubbles efficiently.",
+        "use_cases_potential": "Virtualizing large file trees or complex data structures in the sidebar."
+      },
+      "rich_text_engine": {
+        "package": "lexical, @lexical/react",
+        "where": "LexicalMessageBubble.tsx, LexicalChatInput.tsx",
+        "why": "To allow for rich text, inline images, and complex multi-line formatting.",
+        "how": "Each message bubble hosts a dedicated Lexical instance.",
+        "rationale": "Provides a high-fidelity editing experience akin to Notion or modern IDE chat interfaces.",
+        "intricacies": "Lexical's plugin-based architecture requires careful plugin ordering.",
+        "use_cases_current": "Rich text, inline images, and multi-line formatting in chat.",
+        "use_cases_potential": "Real-time collaborative document editing within the chat."
+      },
+      "inline_code_rendering": {
+        "package": "CodeMirror 6 (via CodeMirrorNode)",
+        "where": "CodeMirrorNode.tsx",
+        "why": "To render code blocks inside chat bubbles with 1:1 parity to the main workspace.",
+        "how": "A custom Lexical node that spins up a CodeMirror instance.",
+        "rationale": "Ensures identical syntax highlighting and functionality across the entire IDE.",
+        "intricacies": "Requires careful management of CodeMirror instances within Lexical nodes to prevent memory leaks.",
+        "use_cases_current": "Code blocks inside chat bubbles.",
+        "use_cases_potential": "Interactive, editable code blocks within chat threads."
+      }
+    }
+  },
+  "sidebar_architecture": {
+    "where": "src/app/Layout.tsx, src/widgets/sidebar/",
+    "why": "To organize project files and conversation threads.",
+    "how": "A modular flex container supporting multiple concurrent sub-panes (File Tree, Conversation Manager).",
+    "rationale": "Strict spatial ordering ensures the File Tree is always furthest left. All lists are strictly virtualized using TanStack Virtual to prevent DOM bloat. Nested structures are flattened into 1D arrays at the data level based on expansion state.",
+    "intricacies": "Requires complex state management for expansion/collapse of nested file structures.",
+    "use_cases_current": "File tree navigation and conversation thread management.",
+    "use_cases_potential": "Integration with external Git repositories for direct file manipulation."
+  },
+  "workspace_enhancements": {
+    "terminal": {
+      "package": "xterm, @xterm/addon-webgl, @xterm/addon-fit",
+      "where": "src/features/terminal/TerminalPanel.tsx",
+      "why": "To provide integrated command-line access.",
+      "how": "xterm.js with WebGL addon for high-performance rendering. Resizable bottom panel.",
+      "rationale": "Industry standard for browser-based terminal emulation. Note: Requires a Node.js backend sidecar (node-pty) for full process forking functionality.",
+      "intricacies": "Terminal functionality is limited in a pure browser environment without a backend sidecar.",
+      "use_cases_current": "Command-line access for build and run tasks.",
+      "use_cases_potential": "Full-featured terminal with support for interactive shell sessions."
+    },
+    "version_control": {
+      "package": "isomorphic-git",
+      "where": "src/services/gitService.ts",
+      "why": "To enable Git operations directly within the browser.",
+      "how": "Pure JavaScript implementation of Git.",
+      "rationale": "Allows for repository management without relying on external system binaries.",
+      "intricacies": "Limited support for complex Git operations compared to native binaries.",
+      "use_cases_current": "Basic repository management.",
+      "use_cases_potential": "Advanced Git workflows, including branching and merging."
+    }
+  }
+}

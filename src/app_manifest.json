@@ -1,0 +1,262 @@
+{
+  "project_name": "Fruitbox IDE",
+  "version": "1.0.0-alpha",
+  "M_current": {},
+  "roadmap": {
+    "WebGPU_Local_LLM_Integration": {
+      "id": "LLM-001",
+      "category": "Backend/AI",
+      "status": "in progress",
+      "user_data": "Sooner, this local-model Fruitbox platform will use industry leading WebGPU implementation technology to run local models in WebLLM, as well as support Gemini and other API keys.",
+      "additional_context": "[SOVEREIGNTY_AXIOM]: [You are a Deterministic State Machine][SYS_ELITE_UNIFIED PROTOCOL]: [U ⊢ I ⊢ Π ⊢ P ⇒ R]",
+      "axiomatic_intent": "Enable local AI inference via WebGPU and WebLLM for high-performance, privacy-first model execution.",
+      "formal_proof": {
+        "premise_1": "Local models require high-performance execution environments.",
+        "premise_2": "WebGPU provides near-native GPU access in the browser.",
+        "premise_3": "WebLLM bridges local models and WebGPU.",
+        "premise_4": "Integrating WebLLM with WebGPU satisfies the requirement for local AI inference.",
+        "conclusion": "Therefore, implementing WebLLM over WebGPU enables the required local model execution."
+      },
+      "forensic_path": {
+        "phase_1": {
+          "name": "WebGPU Initialization",
+          "steps": {
+            "step_1": "Verify WebGPU support in the browser environment.",
+            "step_2": "Initialize WebGPU context and device.",
+            "step_3": "Implement fallback mechanisms for unsupported environments."
+          }
+        },
+        "phase_2": {
+          "name": "WebLLM Integration",
+          "steps": {
+            "step_1": "Import and configure MLC WebLLM engine.",
+            "step_2": "Load Qwen 3.5 9B Quantized model weights into WebGPU memory.",
+            "step_3": "Establish message passing interface for chat and code completion."
+          }
+        },
+        "phase_3": {
+          "name": "API Key Support",
+          "steps": {
+            "step_1": "Implement secure storage for Gemini and other API keys.",
+            "step_2": "Create abstraction layer to switch between local WebLLM and remote APIs.",
+            "step_3": "Test end-to-end inference with both local and remote models."
+          }
+        }
+      },
+      "T_flags": {
+        "t_debug": "pending",
+        "t_doc": "pending",
+        "t_sync": "pending"
+      },
+      "finalization": {
+        "post_implementation_debugging": "pending",
+        "post_implementation_documentation": "pending",
+        "app_manifest_update_status": "pending"
+      }
+    },
+    "Intuitive_GUI_and_Antigravity": {
+      "id": "GUI-001",
+      "category": "Frontend/UI",
+      "status": "pending",
+      "user_data": "The GUI will be also intuitive and industry leading bleeding edge conceptually for seamless chat/conversation management as well as code-base-editing and querying. Fruitbox will become a self-sufficient agent-first Agentic-IDE style codebase editor with features like antigravity",
+      "additional_context": "[SOVEREIGNTY_AXIOM]: [You are a Deterministic State Machine][SYS_ELITE_UNIFIED PROTOCOL]: [U ⊢ I ⊢ Π ⊢ P ⇒ R]",
+      "axiomatic_intent": "Develop a bleeding-edge, agent-first IDE interface with seamless chat, code editing, and novel 'antigravity' spatial interactions.",
+      "formal_proof": {
+        "premise_1": "An agent-first IDE requires seamless integration of chat and code editing.",
+        "premise_2": "Bleeding-edge conceptual GUIs utilize spatial and physics-based interactions.",
+        "premise_3": "Antigravity features provide a novel spatial interaction paradigm.",
+        "premise_4": "Combining these elements creates the desired intuitive and advanced GUI.",
+        "conclusion": "Therefore, implementing a spatial GUI with antigravity physics and integrated chat/code views fulfills the UI requirements."
+      },
+      "forensic_path": {
+        "phase_1": {
+          "name": "Spatial Layout Engine",
+          "steps": {
+            "step_1": "Design a flexible, node-based layout system for editor and chat windows.",
+            "step_2": "Implement drag-and-drop functionality with physics-based constraints.",
+            "step_3": "Integrate 'antigravity' physics using a 2D/3D physics engine (e.g., Matter.js or Three.js physics)."
+          }
+        },
+        "phase_2": {
+          "name": "Seamless Chat & Code Integration",
+          "steps": {
+            "step_1": "Build a unified state manager for chat context and code editor state.",
+            "step_2": "Implement inline code querying and contextual chat overlays.",
+            "step_3": "Develop visual indicators linking chat messages to specific code blocks."
+          }
+        },
+        "phase_3": {
+          "name": "Agentic IDE Features",
+          "steps": {
+            "step_1": "Implement autonomous agent action visualizations (e.g., agent 'typing' or 'reading').",
+            "step_2": "Create UI for agent permission management and task approval.",
+            "step_3": "Refine animations and transitions for a 'bleeding-edge' feel."
+          }
+        }
+      },
+      "T_flags": {
+        "t_debug": "pending",
+        "t_doc": "pending",
+        "t_sync": "pending"
+      },
+      "finalization": {
+        "post_implementation_debugging": "pending",
+        "post_implementation_documentation": "pending",
+        "app_manifest_update_status": "pending"
+      }
+    },
+    "Self_Improving_Agent_Architecture": {
+      "id": "SYS-001",
+      "category": "Architecture/AI",
+      "status": "pending",
+      "user_data": "Then, This Fruitbox will ultimately be a self-improving conversation, document editing, and code-editing platform that prioritizes powerful local agents like Qwen 3.5 9b Quantized.",
+      "additional_context": "[SOVEREIGNTY_AXIOM]: [You are a Deterministic State Machine][SYS_ELITE_UNIFIED PROTOCOL]: [U ⊢ I ⊢ Π ⊢ P ⇒ R]",
+      "axiomatic_intent": "Establish a self-improving architecture where local agents iteratively refine conversations, documents, and code.",
+      "formal_proof": {
+        "premise_1": "Self-improvement requires a feedback loop of action, evaluation, and refinement.",
+        "premise_2": "Local agents (Qwen 3.5 9B) can perform actions and evaluate outcomes.",
+        "premise_3": "A structured memory and versioning system tracks refinements.",
+        "premise_4": "Connecting the agent's evaluation to the memory system enables iterative refinement.",
+        "conclusion": "Therefore, an architecture combining local agents with a feedback-driven memory system achieves self-improvement."
+      },
+      "forensic_path": {
+        "phase_1": {
+          "name": "Feedback Loop Infrastructure",
+          "steps": {
+            "step_1": "Implement a system for capturing user corrections and implicit feedback.",
+            "step_2": "Create an evaluation module for the agent to assess its own code/document edits.",
+            "step_3": "Develop a version control system for tracking iterative improvements."
+          }
+        },
+        "phase_2": {
+          "name": "Agent Prioritization & Orchestration",
+          "steps": {
+            "step_1": "Design a task router that prioritizes local models (Qwen 3.5 9B) for specific tasks.",
+            "step_2": "Implement fallback logic to cloud APIs when local models lack capability or context.",
+            "step_3": "Optimize local model inference for continuous background tasks."
+          }
+        },
+        "phase_3": {
+          "name": "Continuous Learning Simulation",
+          "steps": {
+            "step_1": "Develop a mechanism for the agent to update its system prompt based on past interactions.",
+            "step_2": "Implement a local fine-tuning or RAG (Retrieval-Augmented Generation) pipeline for long-term memory.",
+            "step_3": "Test self-improvement cycles on sample codebases."
+          }
+        }
+      },
+      "T_flags": {
+        "t_debug": "pending",
+        "t_doc": "pending",
+        "t_sync": "pending"
+      },
+      "finalization": {
+        "post_implementation_debugging": "pending",
+        "post_implementation_documentation": "pending",
+        "app_manifest_update_status": "pending"
+      }
+    },
+    "Neurosymbolic_Vector_Persona": {
+      "id": "AI-002",
+      "category": "AI/Persona",
+      "status": "pending",
+      "user_data": "Later, It will have a built in Vector-state persona as well in which the user can interact with as an avatar and will have a soul based on a small Neurosymbolic model combined with a hybrid LLM.",
+      "additional_context": "[SOVEREIGNTY_AXIOM]: [You are a Deterministic State Machine][SYS_ELITE_UNIFIED PROTOCOL]: [U ⊢ I ⊢ Π ⊢ P ⇒ R]",
+      "axiomatic_intent": "Create an interactive avatar persona driven by a hybrid neurosymbolic and LLM architecture with vector-state memory.",
+      "formal_proof": {
+        "premise_1": "A 'soulful' persona requires consistent memory, logical reasoning, and natural language generation.",
+        "premise_2": "Vector-state memory provides consistent long-term context.",
+        "premise_3": "Neurosymbolic models provide logical reasoning and rule-based behavior.",
+        "premise_4": "Hybrid LLMs provide natural language generation.",
+        "conclusion": "Therefore, combining vector-state memory, a neurosymbolic model, and a hybrid LLM creates the required interactive persona."
+      },
+      "forensic_path": {
+        "phase_1": {
+          "name": "Vector-State Memory System",
+          "steps": {
+            "step_1": "Implement a local vector database (e.g., using IndexedDB or a WASM-based vector store).",
+            "step_2": "Develop embedding generation for user interactions and persona states.",
+            "step_3": "Create retrieval mechanisms for contextualizing the persona's responses."
+          }
+        },
+        "phase_2": {
+          "name": "Neurosymbolic Integration",
+          "steps": {
+            "step_1": "Design a symbolic rule engine for core persona traits and logical constraints.",
+            "step_2": "Integrate the rule engine with the LLM prompt generation pipeline.",
+            "step_3": "Implement a feedback loop where LLM outputs are validated against symbolic rules."
+          }
+        },
+        "phase_3": {
+          "name": "Avatar Interaction Layer",
+          "steps": {
+            "step_1": "Develop a 3D or 2D animated avatar interface.",
+            "step_2": "Map neurosymbolic states (emotions, logic states) to avatar animations.",
+            "step_3": "Integrate voice synthesis and recognition for multimodal interaction."
+          }
+        }
+      },
+      "T_flags": {
+        "t_debug": "pending",
+        "t_doc": "pending",
+        "t_sync": "pending"
+      },
+      "finalization": {
+        "post_implementation_debugging": "pending",
+        "post_implementation_documentation": "pending",
+        "app_manifest_update_status": "pending"
+      }
+    },
+    "CodeMirror6_Agentic_Editor": {
+      "id": "IDE-001",
+      "category": "Frontend/Editor",
+      "status": "pending",
+      "user_data": "Determine the axiomatic intent of the program as it relates to the code editor. Predict a roadmap to build-out the codemirror 6 feature into an industry leading editor interface that supports all necessary ideas.",
+      "additional_context": "[SOVEREIGNTY_AXIOM]: [You are a Deterministic State Machine][SYS_ELITE_UNIFIED PROTOCOL]: [U ⊢ I ⊢ Π ⊢ P ⇒ R]",
+      "axiomatic_intent": "To engineer a hyper-reactive, context-aware CodeMirror 6 interface that seamlessly fuses manual human coding with autonomous, inline AI agent actions and neurosymbolic validation.",
+      "formal_proof": {
+        "premise_1": "An industry-leading agentic IDE requires an editor that understands code semantics and agent intents.",
+        "premise_2": "CodeMirror 6 provides a highly extensible, state-driven architecture suitable for complex UI overlays and LSP integrations.",
+        "premise_3": "Integrating local LLMs (WebLLM) directly into the editor state enables zero-latency ghost text and inline refactoring.",
+        "premise_4": "Combining CM6 extensibility with local AI creates a seamless human-agent collaborative surface.",
+        "conclusion": "Therefore, extending CodeMirror 6 with LSP, inline AI widgets, and spatial block manipulation fulfills the requirement for an industry-leading agentic editor."
+      },
+      "forensic_path": {
+        "phase_1": {
+          "name": "Core IDE Capabilities",
+          "steps": {
+            "step_1": "Integrate Language Server Protocol (LSP) via codemirror-languageserver for rich intellisense.",
+            "step_2": "Implement advanced code folding, minimap, and multi-language dynamic loading.",
+            "step_3": "Establish real-time syntax and linting diagnostic pipelines."
+          }
+        },
+        "phase_2": {
+          "name": "Agentic Symbiosis",
+          "steps": {
+            "step_1": "Develop inline ghost-text completion driven by local Qwen 3.5 9B model.",
+            "step_2": "Create inline diff widgets for agent-proposed refactoring and code generation.",
+            "step_3": "Implement semantic code selection (vector-based querying of highlighted blocks)."
+          }
+        },
+        "phase_3": {
+          "name": "Bleeding-Edge Spatial UX",
+          "steps": {
+            "step_1": "Enable 'antigravity' code blocks (detachable, floating editor fragments).",
+            "step_2": "Integrate neurosymbolic logic validation with real-time visual feedback in the gutter.",
+            "step_3": "Implement multi-cursor support for simultaneous human and agent editing."
+          }
+        }
+      },
+      "T_flags": {
+        "t_debug": "pending",
+        "t_doc": "pending",
+        "t_sync": "pending"
+      },
+      "finalization": {
+        "post_implementation_debugging": "pending",
+        "post_implementation_documentation": "pending",
+        "app_manifest_update_status": "pending"
+      }
+    }
+  }
+}

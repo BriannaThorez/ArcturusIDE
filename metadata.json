@@ -1,0 +1,5 @@
+{
+  "name": "ArcturusIDE",
+  "description": "An agent-first Agentic AI coding agent interface using WebGPU to load Qwen, or API for Gemini and DeepSeek local models.",
+  "requestFramePermissions": []
+}

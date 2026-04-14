@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Lexend+Deca:wght@300;400;500&family=Atkinson+Hyperlegible+Mono:wght@400;700&family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Lexend Deca", "Lexend", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-rainforest-900: #050d0a;
+  --color-rainforest-800: #0a1a14;
+  --color-rainforest-700: #112a20;
+  --color-neon-green: #39ff14;
+  --color-neon-teal: #00f0ff;
+  --color-text-main: #e0ffe0;
+  --color-text-muted: #8abeb7;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--color-rainforest-900);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-rainforest-900);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-rainforest-700);
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--color-neon-teal);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-teal);
+  box-shadow: 0 0 0.5rem var(--color-neon-teal);
+}
+
+.juicy-button {
+  transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.juicy-button:active {
+  transform: scale(0.92);
+}
+
+.neon-border {
+  border: 0.0625rem solid rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 1rem rgba(0, 240, 255, 0.05), inset 0 0 1rem rgba(0, 240, 255, 0.02);
+}
+.neon-border:hover {
+  border-color: rgba(0, 240, 255, 0.8);
+  box-shadow: 0 0 1rem rgba(0, 240, 255, 0.4), inset 0 0 0.5rem rgba(0, 240, 255, 0.2);
+}
+
+.glowing-bar {
+  background: linear-gradient(to bottom, var(--color-neon-teal), var(--color-neon-green));
+  box-shadow: 0 0 1rem var(--color-neon-teal);
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
+}
+.glowing-bar:hover {
+  box-shadow: 0 0 2rem var(--color-neon-green);
+  filter: brightness(1.2);
+}
+
+.glass-panel {
+  background: rgba(10, 26, 20, 0.4);
+  backdrop-filter: blur(1.5rem);
+  -webkit-backdrop-filter: blur(1.5rem);
+}
