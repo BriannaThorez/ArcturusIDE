@@ -79,6 +79,7 @@ function secretSafeGuardPlugin() {
 }
 
 export default defineConfig({
+  base: "/ArcturusIDE/",
   plugins: [react(), tailwindcss(), secretSafeGuardPlugin()],
   resolve: {
     alias: {
